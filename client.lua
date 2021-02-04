@@ -7,6 +7,17 @@ Citizen.CreateThread(function()
         TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
         Citizen.Wait(0)
     end
+
+    while ESX.GetPlayerData().job == nil do
+		Citizen.Wait(1)
+	end
+
+	ESX.PlayerData = ESX.GetPlayerData()
+end)
+
+RegisterNetEvent('esx:setJob')
+AddEventHandler('esx:setJob', function(job)
+    ESX.PlayerData.job = job
 end)
 
 function DrawText3D(x, y, z, text)
@@ -30,11 +41,23 @@ Citizen.CreateThread(function()
         local ped = PlayerPedId()
         local pCoords = GetEntityCoords(ped)
         local distance = GetDistanceBetweenCoords(pCoords.x, pCoords.y, pCoords.z, Config.Koordinat.x, Config.Koordinat.y, Config.Koordinat.z, false)
-        if distance < 5 then
-            sleep = 5
-            DrawText3D(Config.Koordinat.x, Config.Koordinat.y, Config.Koordinat.z, '[E] - Kara Para Akla')
-            if IsControlJustPressed(0, 38) then
-                ParaAkla()
+        if Config.Emlak then
+            if ESX.PlayerData.job.name == "realestateagent" then
+                if distance < 5 then
+                    sleep = 5
+                    DrawText3D(Config.Koordinat.x, Config.Koordinat.y, Config.Koordinat.z, '[E] - Kara Para Akla')
+                    if IsControlJustPressed(0, 38) then
+                        ParaAkla()
+                    end
+                end
+            end
+        else
+            if distance < 5 then
+                sleep = 5
+                DrawText3D(Config.Koordinat.x, Config.Koordinat.y, Config.Koordinat.z, '[E] - Kara Para Akla')
+                if IsControlJustPressed(0, 38) then
+                    ParaAkla()
+                end
             end
         end
         Citizen.Wait(sleep)
